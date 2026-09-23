@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <!-- Tanpa meta viewport, browser HP "pura-pura" selebar ~980px lalu
+       mengecilkan halaman, sehingga media query mobile-first tidak berguna. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Personal site Fauzan Hidayat — profil, proyek, dan catatan bacaan.">
+  <title>Fauzan Hidayat</title>
+
+  <!-- Tema dipasang SEBELUM halaman digambar. Jika ditunda ke script.js
+       (yang dimuat dengan defer), halaman sempat tampil terang sesaat
+       lalu berkedip ke gelap. Script kecil ini sengaja dibuat inline. -->
+  <script>
+    try {
+      var saved = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    } catch (e) { /* localStorage bisa diblokir (mode privat) — abaikan, pakai tema terang */ }
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+  <!-- defer: script diunduh paralel tapi baru dijalankan setelah HTML selesai
+       di-parse, sehingga getElementById() pasti menemukan elemennya. -->
+  <script src="script.js" defer></script>
+  <script src="books.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="brand">Fauzan Hidayat</a>
+
+      <nav aria-label="Navigasi utama">
+        <ul class="nav-list">
+          <li><a href="#tentang">Tentang</a></li>
+          <li><a href="#proyek">Proyek</a></li>
+          <li><a href="#repo">Repo</a></li>
+          <li><a href="#bacaan">Bacaan</a></li>
+          <li><a href="#kontak">Kontak</a></li>
+        </ul>
+      </nav>
+
+      <!-- Tahap 2: tombol tema. aria-pressed memberi tahu screen reader
+           apakah mode gelap sedang aktif. Teksnya diisi oleh script.js. -->
+      <button type="button" id="theme-toggle" class="btn btn-ghost btn-small" aria-pressed="false">
+        Mode gelap
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <section id="tentang" class="section container">
+      <h1>Halo, saya Fauzan Hidayat</h1>
+      <p class="lead">[Tulis satu kalimat tentang siapa Anda, misal: mahasiswa Informatika yang tertarik pada ...]</p>
+      <p>[Tulis deskripsi diri di sini: latar belakang, minat, dan apa yang sedang Anda pelajari.]</p>
+      <p>[Tulis paragraf tambahan jika perlu: pengalaman, organisasi, atau tujuan.]</p>
+    </section>
+
+    <section id="proyek" class="section container">
+      <h2>Proyek</h2>
+      <div class="card-grid">
+        <article class="card">
+          <h3>[Nama Proyek 1]</h3>
+          <p>[Deskripsi singkat proyek: masalah apa yang diselesaikan.]</p>
+          <p class="card-tech">[Teknologi: misal Django, PostgreSQL]</p>
+          <a href="#" class="card-link">[Link repo/demo]</a>
+        </article>
+        <article class="card">
+          <h3>[Nama Proyek 2]</h3>
+          <p>[Deskripsi singkat proyek: masalah apa yang diselesaikan.]</p>
+          <p class="card-tech">[Teknologi: misal Next.js, Tailwind]</p>
+          <a href="#" class="card-link">[Link repo/demo]</a>
+        </article>
+        <article class="card">
+          <h3>[Nama Proyek 3]</h3>
+          <p>[Deskripsi singkat proyek: masalah apa yang diselesaikan.]</p>
+          <p class="card-tech">[Teknologi: misal Tableau, SQL]</p>
+          <a href="#" class="card-link">[Link repo/demo]</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Tahap 3: diisi oleh script.js dari GitHub REST API. -->
+    <section id="repo" class="section container">
+      <h2>Repo GitHub Saya</h2>
+      <!-- aria-live: screen reader membacakan perubahan status (memuat/gagal) otomatis. -->
+      <p id="repo-status" class="muted" aria-live="polite">Memuat repo…</p>
+      <div id="repo-list" class="card-grid"></div>
+    </section>
+
+    <!-- Tahap 2 → 4 → 6: Pencatat Bacaan. Diisi & dikendalikan oleh books.js. -->
+    <section id="bacaan" class="section container">
+      <h2>Pencatat Bacaan</h2>
+      <p id="books-alert" class="alert alert-error" role="alert" hidden></p>
+
+      <!-- Panel login/register: tampil jika belum login. -->
+      <div id="auth-panel" hidden>
+        <form id="auth-form" class="form form-narrow" novalidate>
+          <h3 id="auth-title">Masuk</h3>
+          <div class="field">
+            <label for="auth-email">Email</label>
+            <input id="auth-email" name="email" type="email" autocomplete="email" required>
+            <span class="field-error" id="auth-email-error"></span>
+          </div>
+          <div class="field">
+            <label for="auth-password">Password</label>
+            <input id="auth-password" name="password" type="password" autocomplete="current-password" required minlength="8">
+            <span class="field-error" id="auth-password-error"></span>
+          </div>
+          <button type="submit" class="btn" id="auth-submit">Masuk</button>
+          <p class="auth-switch">
+            <span id="auth-switch-text">Belum punya akun?</span>
+            <button type="button" class="link-button" id="auth-switch">Daftar</button>
+          </p>
+        </form>
+      </div>
+
+      <!-- Panel aplikasi: tampil jika sudah login. -->
+      <div id="app-panel" hidden>
+        <div class="session-bar">
+          <span class="muted">Masuk sebagai <strong id="user-email"></strong></span>
+          <button type="button" class="btn btn-ghost btn-small" id="logout-btn">Keluar</button>
+        </div>
+
+        <div class="reading-layout">
+          <!-- novalidate: validasi bawaan browser dimatikan agar pesan error
+               ditampilkan konsisten oleh JavaScript kita sendiri. -->
+          <form id="book-form" class="form" novalidate>
+            <h3>Tambah buku</h3>
+            <div class="field">
+              <label for="book-title">Judul</label>
+              <input id="book-title" name="title" type="text" maxlength="200" required>
+              <span class="field-error" id="book-title-error"></span>
+            </div>
+            <div class="field">
+              <label for="book-author">Penulis</label>
+              <input id="book-author" name="author" type="text" maxlength="200" required>
+              <span class="field-error" id="book-author-error"></span>
+            </div>
+            <div class="field">
+              <label for="book-status">Status</label>
+              <select id="book-status" name="status">
+                <option value="want">Ingin dibaca</option>
+                <option value="reading">Sedang dibaca</option>
+                <option value="done">Selesai</option>
+              </select>
+            </div>
+            <button type="submit" class="btn" id="book-submit">Tambah</button>
+          </form>
+
+          <div>
+            <div class="list-toolbar">
+              <span class="muted" id="book-count"></span>
+              <div class="filter">
+                <label for="filter-status">Filter</label>
+                <select id="filter-status">
+                  <option value="all">Semua</option>
+                  <option value="want">Ingin dibaca</option>
+                  <option value="reading">Sedang dibaca</option>
+                  <option value="done">Selesai</option>
+                </select>
+              </div>
+            </div>
+            <ul id="book-list" class="book-list"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="kontak" class="site-footer">
+    <div class="container">
+      <h2>Kontak</h2>
+      <address>
+        <ul class="contact-list">
+          <li>Email: <a href="mailto:[email@contoh.com]">[email@contoh.com]</a></li>
+          <li>GitHub: <a href="#">[github.com/username]</a></li>
+          <li>LinkedIn: <a href="#">[linkedin.com/in/username]</a></li>
+        </ul>
+      </address>
+      <p class="copyright">&copy; 2026 Fauzan Hidayat</p>
+    </div>
+  </footer>
+
+</body>
+</html>

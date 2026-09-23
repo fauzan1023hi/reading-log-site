@@ -1,0 +1,523 @@
+/* =========================================================
+   1. CSS CUSTOM PROPERTIES (variabel)
+   Warna & ukuran didefinisikan SEKALI di sini. Alasannya:
+   - ganti satu nilai → seluruh halaman ikut berubah;
+   - dark mode cukup menimpa variabel ini (lihat blok berikutnya),
+     tanpa menulis ulang aturan tiap elemen.
+   ========================================================= */
+:root {
+  --color-bg: #f7f7f5;
+  --color-surface: #ffffff;
+  --color-text: #1f2328;
+  --color-muted: #5c636b;
+  --color-border: #dcdfe3;
+  --color-primary: #2f6b4f;
+  --color-primary-hover: #24533d;
+  --color-on-primary: #ffffff;
+  --color-danger: #b42318;
+  --color-danger-bg: #fdecea;
+  --color-success-bg: #e7f3ec;
+
+  /* Warna badge status buku */
+  --status-want: #6b5b1f;
+  --status-want-bg: #f6efd6;
+  --status-reading: #1f4f8a;
+  --status-reading-bg: #e3edf9;
+  --status-done: #2f6b4f;
+  --status-done-bg: #e3f1e9;
+
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --radius: 8px;
+  --space: 1rem;
+  --max-width: 1000px;
+
+  color-scheme: light; /* scrollbar & input bawaan browser ikut tema terang */
+}
+
+/* Tahap 2 — DARK MODE
+   JavaScript hanya memasang atribut data-theme="dark" di <html>.
+   Semua perubahan warna terjadi di CSS lewat variabel. */
+[data-theme="dark"] {
+  --color-bg: #15181b;
+  --color-surface: #1e2226;
+  --color-text: #e6e8ea;
+  --color-muted: #9aa3ab;
+  --color-border: #333a40;
+  --color-primary: #6fc39a;
+  --color-primary-hover: #8fd4b1;
+  --color-on-primary: #10231a;
+  --color-danger: #ff8a80;
+  --color-danger-bg: #3a1f1d;
+  --color-success-bg: #1d3328;
+
+  --status-want: #e8d48a;
+  --status-want-bg: #3a3420;
+  --status-reading: #9cc2f0;
+  --status-reading-bg: #1f2d40;
+  --status-done: #8fd4b1;
+  --status-done-bg: #1d3328;
+
+  color-scheme: dark;
+}
+
+/* =========================================================
+   2. RESET MINIMAL
+   box-sizing: border-box → lebar elemen SUDAH termasuk
+   padding & border, sehingga perhitungan layout tidak meleset.
+   ========================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+h1, h2, h3 {
+  line-height: 1.25;
+  margin-top: 0;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* Fokus keyboard harus terlihat: pengguna tanpa mouse menavigasi dengan Tab. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   3. LAYOUT UMUM
+   ========================================================= */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;          /* auto kiri-kanan → konten di tengah */
+  padding-inline: var(--space); /* jarak aman dari tepi layar HP */
+}
+
+.section {
+  padding-block: calc(var(--space) * 2.5);
+}
+
+.lead {
+  font-size: 1.15rem;
+  color: var(--color-muted);
+}
+
+.muted {
+  color: var(--color-muted);
+}
+
+/* =========================================================
+   4. HEADER & NAVIGASI — FLEXBOX (satu dimensi)
+   ========================================================= */
+.site-header {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header-inner {
+  display: flex;
+  flex-direction: column;  /* MOBILE-FIRST: default ditumpuk vertikal */
+  align-items: center;
+  gap: calc(var(--space) * 0.5);
+  padding-block: var(--space);
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.nav-list {
+  display: flex;           /* <li> berjajar horizontal */
+  flex-wrap: wrap;         /* layar sempit → turun ke baris baru, bukan terpotong */
+  justify-content: center;
+  gap: var(--space);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-list a {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* =========================================================
+   5. TOMBOL & FORM (Tahap 2)
+   ========================================================= */
+.btn {
+  font: inherit;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-primary);
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Tombol sekunder: garis saja, dipakai untuk aksi yang lebih ringan. */
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.btn-ghost:hover {
+  background-color: var(--color-bg);
+  border-color: var(--color-muted);
+}
+
+.btn-danger {
+  background-color: transparent;
+  color: var(--color-danger);
+  border-color: var(--color-border);
+}
+
+.btn-danger:hover {
+  background-color: var(--color-danger-bg);
+  border-color: var(--color-danger);
+}
+
+.btn-small {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.875rem;
+}
+
+.form {
+  display: grid;
+  gap: calc(var(--space) * 0.75);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space);
+}
+
+.form-narrow {
+  max-width: 360px;
+}
+
+.field {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.field label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.field input,
+.field select,
+.filter select,
+.book-status select {
+  font: inherit;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  width: 100%;
+}
+
+/* Kolom yang gagal validasi diberi garis merah — informasi tidak hanya lewat teks. */
+.field input[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+
+.field-error {
+  color: var(--color-danger);
+  font-size: 0.85rem;
+  min-height: 1.2em; /* ruang disiapkan agar layout tidak "melompat" saat pesan muncul */
+}
+
+.alert {
+  padding: 0.6rem 0.9rem;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+}
+
+.alert-error {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+/* =========================================================
+   6. KARTU PROYEK — CSS GRID (dua dimensi)
+   ========================================================= */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;   /* mobile: 1 kolom */
+  gap: var(--space);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space);
+}
+
+.card p {
+  margin-top: 0;
+}
+
+.card-tech {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.card-link {
+  margin-top: auto;   /* mendorong link ke dasar kartu → sejajar di semua kartu */
+  font-weight: 600;
+}
+
+/* =========================================================
+   7. REPO GITHUB (Tahap 3) — memakai .card-grid & .card di atas
+   ========================================================= */
+.repo-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  margin-top: auto;
+}
+
+.card h3 a {
+  text-decoration: none;
+  word-break: break-word; /* nama repo panjang tanpa spasi tidak merusak kartu */
+}
+
+/* =========================================================
+   8. PENCATAT BACAAN (Tahap 2, 4, 6)
+   ========================================================= */
+.reading-layout {
+  display: grid;
+  grid-template-columns: 1fr;   /* mobile: form di atas, daftar di bawah */
+  gap: calc(var(--space) * 1.5);
+  align-items: start;
+}
+
+.session-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space);
+  margin-bottom: var(--space);
+}
+
+.list-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter select {
+  width: auto;
+}
+
+.book-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.book-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.75rem var(--space);
+}
+
+.book-info {
+  flex: 1 1 200px;   /* ambil sisa ruang; di bawah 200px turun ke baris sendiri */
+  min-width: 0;
+}
+
+.book-title {
+  font-weight: 600;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.book-author {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.book-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.book-status select {
+  width: auto;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.875rem;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  margin-top: 0.25rem;
+}
+
+.badge-want { color: var(--status-want); background-color: var(--status-want-bg); }
+.badge-reading { color: var(--status-reading); background-color: var(--status-reading-bg); }
+.badge-done { color: var(--status-done); background-color: var(--status-done-bg); }
+
+.empty-state {
+  padding: var(--space);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.auth-switch {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.link-button {
+  font: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* =========================================================
+   9. FOOTER
+   ========================================================= */
+.site-footer {
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding-block: calc(var(--space) * 2);
+}
+
+.site-footer address {
+  font-style: normal;
+}
+
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space);
+}
+
+.copyright {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+/* Teks khusus pembaca layar: tidak terlihat, tapi tetap dibacakan. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* =========================================================
+   10. MEDIA QUERY — MOBILE-FIRST (min-width)
+   Gaya di atas adalah versi HP; blok ini MENAMBAH aturan
+   saat layar melebar.
+   ========================================================= */
+
+/* Tablet: >= 600px */
+@media (min-width: 600px) {
+  .header-inner {
+    flex-direction: row;
+  }
+
+  .header-inner nav {
+    margin-left: auto;   /* dorong nav + tombol tema ke kanan, brand tetap di kiri */
+  }
+
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop: >= 900px */
+@media (min-width: 900px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .section {
+    padding-block: calc(var(--space) * 4);
+  }
+
+  /* Form tambah buku di kiri (sempit), daftar di kanan (lebar). */
+  .reading-layout {
+    grid-template-columns: 320px 1fr;
+  }
+}
+
+/* Hormati pengguna yang meminta animasi minimal di pengaturan OS. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

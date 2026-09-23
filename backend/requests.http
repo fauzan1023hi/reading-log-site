@@ -1,0 +1,56 @@
+### Uji endpoint dengan ekstensi VS Code "REST Client" (humao.rest-client).
+### Klik "Send Request" di atas tiap blok. Cookie login disimpan otomatis
+### oleh REST Client, jadi jalankan register/login dulu sebelum /books.
+
+@base = http://localhost:3000/api
+
+### Health check
+GET {{base}}/health
+
+### Tanpa login → 401
+GET {{base}}/books
+
+### Register (201; jalankan sekali — kedua kalinya 409 karena email sudah ada)
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{ "email": "fauzan@contoh.com", "password": "rahasia123" }
+
+### Login (200) — cookie "token" ikut tersimpan
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "fauzan@contoh.com", "password": "rahasia123" }
+
+### Siapa saya?
+GET {{base}}/auth/me
+
+### Tambah buku (201)
+POST {{base}}/books
+Content-Type: application/json
+
+{ "title": "Bumi Manusia", "author": "Pramoedya Ananta Toer", "status": "reading" }
+
+### Validasi server gagal (400)
+POST {{base}}/books
+Content-Type: application/json
+
+{ "title": "", "status": "baca" }
+
+### Daftar buku milik saya (200)
+GET {{base}}/books
+
+### Satu buku (200 / 404 jika tidak ada / 403 jika milik user lain)
+GET {{base}}/books/1
+
+### Ubah buku (200) — PUT wajib mengirim semua field
+PUT {{base}}/books/1
+Content-Type: application/json
+
+{ "title": "Bumi Manusia", "author": "Pramoedya Ananta Toer", "status": "done" }
+
+### Hapus buku (204)
+DELETE {{base}}/books/1
+
+### Logout (204) — cookie dihapus
+POST {{base}}/auth/logout

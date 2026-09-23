@@ -1,0 +1,5 @@
+node_modules/
+# Hasil "npm run build" — dibuat ulang oleh Vercel, tidak perlu di-commit.
+dist/
+.env
+.env.local

@@ -1,0 +1,3 @@
+node_modules/
+# Berisi connection string & JWT secret — jangan pernah di-commit.
+.env

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Personal site Fauzan Hidayat — profil, proyek, dan catatan bacaan.">
+  <title>Fauzan Hidayat</title>
+  <!-- Sama seperti versi JS murni: tema dipasang sebelum React dimuat
+       agar halaman tidak berkedip terang → gelap. -->
+  <script>
+    try {
+      var saved = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <!-- Satu-satunya elemen di HTML. Seluruh isi halaman dibuat oleh React di sini. -->
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
